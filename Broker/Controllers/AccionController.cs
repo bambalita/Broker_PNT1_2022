@@ -10,7 +10,7 @@ namespace Broker.Controllers
         {
             List<Accion>? acciones = null;
 
-            using (VentasContext context = new VentasContext())
+            using (XXXXContext context = new XXXXContext())
             {
                 acciones = context.Acciones.ToList();
             }
