@@ -20,7 +20,7 @@ namespace Broker.Models
         [EmailAddress]
         public string Mail { get; set; }
 
-        [ForeignKey("Direccion")]
+        [ForeignKey ("direccionID")]
         public Direccion Direccion { get; set; }
 
         [RegularExpression(@"[0-9]{2}[0-9]{4}[0-9]{4}")]
