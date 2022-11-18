@@ -9,13 +9,13 @@ namespace Broker.Models
             option.UseSqlServer("Data Source=(local); Initial Catalog=Broker; Integrated Security=true");
         }
 
-        DbSet<Direccion> Direcciones { get; set; }
-        DbSet<Persona> Personas { get; set; }
-        DbSet<Orden> Ordenes { get; set; }
-        DbSet<Accion> Acciones { get; set; }
-        DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Direccion> Direcciones { get; set; }
+        public DbSet<Persona> Personas { get; set; }
+        public DbSet<Orden> Ordenes { get; set; }
+        public DbSet<Accion> Acciones { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
 
-        // Hola
+        
 
     }
 }
