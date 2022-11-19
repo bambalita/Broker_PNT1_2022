@@ -4,11 +4,9 @@
     {
         public double CantDinero {get; set;}
 
-        public List<Accion> acciones {get; set;}
+        public List<Accion> Acciones {get; set;} = new List<Accion> { };
 
-        public List<Orden> ordenes {get; set;}
-
-
+        public List<Orden> Ordenes {get; set;} = new List<Orden> { };
 
     }
 }

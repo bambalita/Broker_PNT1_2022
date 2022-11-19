@@ -45,7 +45,17 @@ namespace Broker.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            return View();
+            
+            if (TempData["direccion"] == null)
+            {
+                return RedirectToAction("Create", "Direcciones");
+            }
+            else 
+            {
+                TempData["dirID"] = TempData["direccion"];
+                return View();
+            }
+            
         }
 
         // POST: Usuarios/Create
@@ -53,15 +63,14 @@ namespace Broker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CantDinero,ID,Nombre,Apellido,Mail,Telefono,DNI")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("ID,Nombre,Apellido,Mail,Telefono,DNI,Direccion")] Usuario usuario)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(usuario);
+            usuario.Direccion = _context.Direcciones.Find(TempData["dirID"]);
+            usuario.CantDinero = 0;
+            _context.Add(usuario);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Usuarios/Edit/5
