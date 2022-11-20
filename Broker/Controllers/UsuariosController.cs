@@ -161,6 +161,12 @@ namespace Broker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Depositar()
+        {
+            ViewBag.listaUsuarios = _context.Usuarios.
+            return View();
+        }
+
         private bool UsuarioExists(int id)
         {
           return _context.Usuarios.Any(e => e.ID == id);
