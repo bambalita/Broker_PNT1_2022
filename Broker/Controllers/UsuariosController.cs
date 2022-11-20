@@ -161,12 +161,44 @@ namespace Broker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Depositar()
+        public IActionResult Depositar() 
         {
-            ViewBag.listaUsuarios = _context.Usuarios.
+            ViewBag.listaUsuarios = _context.Usuarios.ToList();
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Depositar(int id, int CantDinero)
+        {
+            Usuario usuario = _context.Usuarios.Find(id);
+            if (CantDinero != 0)
+            {
+                usuario.CantDinero += CantDinero;
+                _context.Update(usuario);
+                _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+
+        }
+        public IActionResult Extraer()
+        {
+            ViewBag.listaUsuarios = _context.Usuarios.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Extraer(int id, int CantDinero)
+        {
+            Usuario usuario = _context.Usuarios.Find(id);
+            if (CantDinero != 0)
+            {
+                usuario.CantDinero -= CantDinero;
+                _context.Update(usuario);
+                _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+
+        }
         private bool UsuarioExists(int id)
         {
           return _context.Usuarios.Any(e => e.ID == id);
