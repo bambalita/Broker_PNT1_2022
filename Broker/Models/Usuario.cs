@@ -8,5 +8,15 @@
 
         public List<Orden> Ordenes {get; set;} = new List<Orden> { };
 
+        public bool esCantDineroValido(int cant) 
+        {
+            bool resul = false;
+
+            if ((this.CantDinero - cant) > 0) 
+            {
+                resul = true;
+            }
+            return resul;
+        }
     }
 }

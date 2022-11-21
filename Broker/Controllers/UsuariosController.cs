@@ -177,7 +177,7 @@ namespace Broker.Controllers
                 _context.Update(usuario);
                 _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
 
         }
         public IActionResult Extraer()
@@ -190,13 +190,13 @@ namespace Broker.Controllers
         public IActionResult Extraer(int id, int CantDinero)
         {
             Usuario usuario = _context.Usuarios.Find(id);
-            if (CantDinero != 0)
+            if (usuario.esCantDineroValido(CantDinero))
             {
                 usuario.CantDinero -= CantDinero;
                 _context.Update(usuario);
                 _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
 
         }
         private bool UsuarioExists(int id)
