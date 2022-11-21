@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Broker.Models
 {
@@ -9,12 +10,13 @@ namespace Broker.Models
         [Required]
         public double PrecioCompra { get; set; }
         [Required]
-        public int cantidad { get; set; }
+        public int Cantidad { get; set; }
         [Required]
         public Accion Accion { get; set; }
         [Required]
         public DateTime FechaCompra { get; set; }
         [Required]
+        [DisplayName("Compra")]
         public Boolean EsCompra { get; set; }
 
 

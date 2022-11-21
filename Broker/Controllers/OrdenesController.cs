@@ -53,8 +53,9 @@ namespace Broker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PrecioCompra,cantidad,FechaCompra,EsCompra")] Orden orden)
+        public async Task<IActionResult> Create([Bind("Id,PrecioCompra,Cantidad,EsCompra")] Orden orden)
         {
+            orden.FechaCompra = DateTime.Now;
             if (ModelState.IsValid)
             {
                 _context.Add(orden);
@@ -85,7 +86,7 @@ namespace Broker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PrecioCompra,cantidad,FechaCompra,EsCompra")] Orden orden)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PrecioCompra,Cantidad,FechaCompra,EsCompra")] Orden orden)
         {
             if (id != orden.Id)
             {
