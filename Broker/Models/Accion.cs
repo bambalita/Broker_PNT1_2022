@@ -14,5 +14,10 @@ namespace Broker.Models
         [Required]
         public double Precio { get; set; }
 
+        public string EmpresaPrecio() 
+        {
+            return Empresa + ": $" + Precio.ToString();
+        }
+
     }
 }

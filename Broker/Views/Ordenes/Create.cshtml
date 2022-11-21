@@ -1,5 +1,6 @@
 ﻿@model Broker.Models.Orden
 
+
 @{
     ViewData["Title"] = "Create";
 }
@@ -12,6 +13,24 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div  class="form-group">
+                <label class="control-label">Usuario</label>
+                <select name="UsuarioID" class="form-control">
+                    @foreach (var item in ViewBag.Usuarios)
+                    {
+                        <option value="@item.ID">@item.NombreCompletoConID()</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Accion</label>
+                <select name="AccionID" class="form-control">
+                    @foreach (var item in ViewBag.Acciones)
+                    {
+                        <option value="@item.Id">@item.EmpresaPrecio()</option>
+                    }
+                </select>
+            </div>
             <div class="form-group">
                 <label asp-for="PrecioCompra" class="control-label"></label>
                 <input asp-for="PrecioCompra" class="form-control" />

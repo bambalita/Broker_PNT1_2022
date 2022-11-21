@@ -9,6 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<br />
 <p>
     <a asp-action="Depositar">Depositar</a>
     <a asp-action="Extraer">Extraer</a>
@@ -62,7 +63,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a> |
+                <a asp-action="Cartera" asp-route-id="@item.ID">Cartera</a>
             </td>
         </tr>
 }

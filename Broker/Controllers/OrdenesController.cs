@@ -45,6 +45,8 @@ namespace Broker.Controllers
         // GET: Ordenes/Create
         public IActionResult Create()
         {
+            ViewBag.Acciones = _context.Acciones.ToList();
+            ViewBag.Usuarios = _context.Usuarios.ToList();
             return View();
         }
 
@@ -53,15 +55,26 @@ namespace Broker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PrecioCompra,Cantidad,EsCompra")] Orden orden)
+        public async Task<IActionResult> Create(int AccionId,int UsuarioId, [Bind("Id,Cantidad,EsCompra")] Orden orden)
         {
+            orden.Accion = _context.Acciones.Find(AccionId);
             orden.FechaCompra = DateTime.Now;
-            if (ModelState.IsValid)
+            Usuario usuario = _context.Usuarios.Find(UsuarioId);
+            //Si el precio de la accion * la cantidad no es igual al precio de compra * la cantidad entonces te devuelve al indice y no carga la orden
+            if((orden.Accion.Precio * orden.Cantidad) != (orden.PrecioCompra * orden.Cantidad))
             {
-                _context.Add(orden);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            else 
+            {
+                usuario.Ordenes.Add(orden);
+                _context.Add(orden);
+                _context.Update(usuario);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+
+            }
+
             return View(orden);
         }
 

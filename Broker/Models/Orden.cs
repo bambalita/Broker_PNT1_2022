@@ -19,6 +19,11 @@ namespace Broker.Models
         [DisplayName("Compra")]
         public Boolean EsCompra { get; set; }
 
+        public string EmpresaPrecio() 
+        {
+            return Accion.EmpresaPrecio();
+        }
+
 
     }
 }

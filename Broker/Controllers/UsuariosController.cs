@@ -67,7 +67,10 @@ namespace Broker.Controllers
         {
             usuario.Direccion = _context.Direcciones.Find(TempData["dirID"]);
             usuario.CantDinero = 0;
+            //agrega el usuario
             _context.Add(usuario);
+            //le hace un update a la direccion del usuario
+            _context.Update(usuario.Direccion);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
 
@@ -197,6 +200,14 @@ namespace Broker.Controllers
                 _context.SaveChangesAsync();
             }
             return RedirectToAction("Index");
+
+        }
+
+        public async Task<IActionResult> Cartera(int id)
+        {
+            IEnumerable<Orden> ordenes = _context.Ordenes.Where(o => o.Id == id);
+            ViewBag.NombreCompleto = _context.Usuarios.Find(id).NombreCompletoConID();
+            return View(ordenes);
 
         }
         private bool UsuarioExists(int id)
