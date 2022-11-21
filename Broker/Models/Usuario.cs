@@ -18,5 +18,10 @@
             }
             return resul;
         }
+
+        public string DireccionCompleta() 
+        {
+            return this.Direccion.DireccionCompleta();
+        }
     }
 }

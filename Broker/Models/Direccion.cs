@@ -22,5 +22,10 @@ namespace Broker.Models
         public int Numero { get; set; }
         
         public string Departamento { get; set; }
+
+        public string DireccionCompleta() 
+        {
+            return Calle + " " + Numero + ", " + Departamento + ", " + Ciudad + ", " + Provincia + ", " + Pais;
+        }
     }
 }
