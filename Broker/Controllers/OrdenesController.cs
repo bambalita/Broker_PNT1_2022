@@ -55,15 +55,15 @@ namespace Broker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int AccionId,int UsuarioId, [Bind("Id,Cantidad,EsCompra")] Orden orden)
+        public async Task<IActionResult> Create(int AccionId,int UsuarioId, [Bind("Id,Cantidad,PrecioCompra,EsCompra")] Orden orden)
         {
             orden.Accion = _context.Acciones.Find(AccionId);
             orden.FechaCompra = DateTime.Now;
             Usuario usuario = _context.Usuarios.Find(UsuarioId);
             //Si el precio de la accion * la cantidad no es igual al precio de compra * la cantidad entonces te devuelve al indice y no carga la orden
-            if((orden.Accion.Precio * orden.Cantidad) != (orden.PrecioCompra * orden.Cantidad))
+            if((orden.Accion.Precio * orden.Cantidad) != (orden.PrecioCompra))
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); 
             }
             else 
             {
