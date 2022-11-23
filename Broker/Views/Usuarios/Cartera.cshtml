@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Broker.Models.Orden>
+﻿@model IEnumerable<Broker.Models.AccionOrden>
 
 @{
     ViewData["Title"] = "Cartera";
@@ -10,10 +10,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PrecioCompra)
+                @Html.DisplayNameFor(model => model.NombreEmpresa)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cantidad)
+                @Html.DisplayNameFor(model => model.PrecioAccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadAccion)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FechaCompra)
@@ -29,10 +32,13 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PrecioCompra)
+                    @Html.DisplayFor(modelItem => item.NombreEmpresa)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Cantidad)
+                    @Html.DisplayFor(modelItem => item.PrecioAccion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadAccion)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FechaCompra)

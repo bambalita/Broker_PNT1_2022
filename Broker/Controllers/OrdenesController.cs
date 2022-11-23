@@ -55,7 +55,7 @@ namespace Broker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int AccionId,int UsuarioId, [Bind("Id,Cantidad,EsCompra")] Orden orden)
+        public async Task<IActionResult> Create(int AccionId,int UsuarioId, [Bind("Id,Cantidad,PrecioCompra, EsCompra")] Orden orden)
         {
             orden.Accion = _context.Acciones.Find(AccionId);
             orden.FechaCompra = DateTime.Now;
@@ -67,14 +67,32 @@ namespace Broker.Controllers
             }
             else 
             {
-                usuario.Ordenes.Add(orden);
-                _context.Add(orden);
-                _context.Update(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-
+                if (orden.EsCompra)
+                {
+                    if ((usuario.CantDinero - orden.PrecioCompra) < 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        usuario.Ordenes.Add(orden);
+                        _context.Add(orden);
+                        usuario.CantDinero -= orden.PrecioCompra;
+                        _context.Update(usuario);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                else 
+                {
+                    usuario.Ordenes.Add(orden);
+                    _context.Add(orden);
+                    usuario.CantDinero += orden.PrecioCompra;
+                    _context.Update(usuario);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
             return View(orden);
         }
 
