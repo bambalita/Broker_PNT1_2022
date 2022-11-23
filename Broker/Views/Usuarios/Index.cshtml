@@ -4,16 +4,24 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Usuarios</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<a asp-action="Create">
+<button type="button" class="btn btn-primary"> 
+    Crear nuevo
+    </button></a>
 <br />
-<p>
-    <a asp-action="Depositar">Depositar</a>
-    <a asp-action="Extraer">Extraer</a>
-</p>
+<br />
+<a asp-action="Depositar">
+<button type="button" class="btn btn-primary"> 
+    Depositar
+    </button></a>
+
+    <a asp-action="Extraer">
+<button type="button" class="btn btn-primary"> 
+    Extraer
+    </button></a>
+
 
 <table class="table">
     <thead>
