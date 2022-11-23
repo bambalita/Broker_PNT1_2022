@@ -61,8 +61,37 @@ namespace Broker.Controllers
             orden.FechaCompra = DateTime.Now;
             Usuario usuario = _context.Usuarios.Find(UsuarioId);
             //Si el precio de la accion * la cantidad no es igual al precio de compra * la cantidad entonces te devuelve al indice y no carga la orden
-            if((orden.Accion.Precio * orden.Cantidad) != (orden.PrecioCompra))
+            if((orden.Accion.Precio * orden.Cantidad) != (orden.PrecioCompra * orden.Cantidad))
             {
+                return RedirectToAction(nameof(Index));
+            }
+            else 
+            {
+                if (orden.EsCompra)
+                {
+                    if ((usuario.CantDinero - orden.PrecioCompra) < 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        usuario.Ordenes.Add(orden);
+                        _context.Add(orden);
+                        usuario.CantDinero -= orden.PrecioCompra;
+                        _context.Update(usuario);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                else 
+                {
+                    usuario.Ordenes.Add(orden);
+                    _context.Add(orden);
+                    usuario.CantDinero += orden.PrecioCompra;
+                    _context.Update(usuario);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
                 return RedirectToAction(nameof(Index)); 
             }
             else 
@@ -74,7 +103,6 @@ namespace Broker.Controllers
                 return RedirectToAction(nameof(Index));
 
             }
-
             return View(orden);
         }
 

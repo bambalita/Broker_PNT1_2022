@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Broker.Models;
+using System.Drawing;
 
 namespace Broker.Controllers
 {
@@ -205,9 +206,18 @@ namespace Broker.Controllers
 
         public async Task<IActionResult> Cartera(int id)
         {
-            IEnumerable<Orden> ordenes = _context.Ordenes.Where(o => o.Id == id);
+            //Se creo el modelo AccionOrden para que contenga el join. Dentro del join se le asigna un new y se le pasan los datos para que pueda pasarlo a la vista. 
+            IEnumerable<AccionOrden> test = _context.Acciones.Join(_context.Ordenes, a => a.Id, o => o.Id, (a, o) => new AccionOrden {
+                NombreEmpresa = a.Empresa,
+                PrecioAccion = a.Precio,
+                OrdenId = o.Id,
+                CantidadAccion = o.Cantidad,
+                FechaCompra = o.FechaCompra,
+                EsCompra = o.EsCompra
+            }).Where(o => o.OrdenId == id).ToList();
+            
             ViewBag.NombreCompleto = _context.Usuarios.Find(id).NombreCompletoConID();
-            return View(ordenes);
+            return View(test);
 
         }
         private bool UsuarioExists(int id)
