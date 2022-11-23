@@ -94,15 +94,14 @@ namespace Broker.Controllers
                 }
                 return RedirectToAction(nameof(Index)); 
             }
-            else 
-            {
+           
                 usuario.Ordenes.Add(orden);
                 _context.Add(orden);
                 _context.Update(usuario);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
 
-            }
+           
             return View(orden);
         }
 
