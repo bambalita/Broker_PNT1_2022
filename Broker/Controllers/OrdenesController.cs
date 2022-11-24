@@ -61,7 +61,7 @@ namespace Broker.Controllers
             orden.FechaCompra = DateTime.Now;
             Usuario usuario = _context.Usuarios.Find(UsuarioId);
             //Si el precio de la accion * la cantidad no es igual al precio de compra * la cantidad entonces te devuelve al indice y no carga la orden
-            if((orden.Accion.Precio * orden.Cantidad) != (orden.PrecioCompra * orden.Cantidad))
+            if((orden.Accion.Precio * orden.Cantidad) != (orden.PrecioCompra))
             {
                 return RedirectToAction(nameof(Index));
             }
