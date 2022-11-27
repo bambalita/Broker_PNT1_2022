@@ -45,6 +45,8 @@ namespace Broker.Controllers
         // GET: Ordenes/Create
         public IActionResult Create()
         {
+            ViewBag.Acciones = _context.Acciones.ToList();
+            ViewBag.Usuarios = _context.Usuarios.ToList();
             return View();
         }
 
@@ -53,14 +55,47 @@ namespace Broker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PrecioCompra,cantidad,FechaCompra,EsCompra")] Orden orden)
+        public async Task<IActionResult> Create(int AccionId,int UsuarioId, [Bind("Id,Cantidad,PrecioCompra,EsCompra")] Orden orden)
         {
-            if (ModelState.IsValid)
+            orden.Accion = _context.Acciones.Find(AccionId);
+            orden.FechaCompra = DateTime.Now;
+            Usuario usuario = _context.Usuarios.Find(UsuarioId);
+            //Si el precio de la accion * la cantidad no es igual al precio de compra * la cantidad entonces te devuelve al indice y no carga la orden
+            if((orden.Accion.Precio * orden.Cantidad) != (orden.PrecioCompra))
             {
-                _context.Add(orden);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            else 
+            {
+                if (orden.EsCompra)
+                {
+                    if ((usuario.CantDinero - orden.PrecioCompra) < 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        usuario.Ordenes.Add(orden);
+                        _context.Add(orden);
+                        usuario.CantDinero -= orden.PrecioCompra;
+                        _context.Update(usuario);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                else 
+                {
+                    usuario.Ordenes.Add(orden);
+                    _context.Add(orden);
+                    usuario.CantDinero += orden.PrecioCompra;
+                    _context.Update(usuario);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                return RedirectToAction(nameof(Index)); 
+            }
+
             return View(orden);
         }
 
@@ -85,7 +120,7 @@ namespace Broker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PrecioCompra,cantidad,FechaCompra,EsCompra")] Orden orden)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PrecioCompra,Cantidad,FechaCompra,EsCompra")] Orden orden)
         {
             if (id != orden.Id)
             {

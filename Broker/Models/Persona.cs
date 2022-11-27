@@ -30,5 +30,9 @@ namespace Broker.Models
         [Range(1,100000000, ErrorMessage = "El valor debe estar entre 1 y 100000000")]
         public long DNI { get; set; }
 
+        public string NombreCompletoConID()
+        {
+            return ID + "." + Nombre + " " + Apellido;
+        }
     }
 }

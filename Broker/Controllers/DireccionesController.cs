@@ -58,7 +58,8 @@ namespace Broker.Models
             {
                 _context.Add(direccion);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                TempData["direccion"] = direccion.ID;
+                return RedirectToAction("Create", "Usuarios");
             }
             return View(direccion);
         }

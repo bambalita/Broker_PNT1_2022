@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Broker.Models;
+using System.Drawing;
 
 namespace Broker.Controllers
 {
@@ -45,7 +46,17 @@ namespace Broker.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            return View();
+            
+            if (TempData["direccion"] == null)
+            {
+                return RedirectToAction("Create", "Direcciones");
+            }
+            else 
+            {
+                TempData["dirID"] = TempData["direccion"];
+                return View();
+            }
+            
         }
 
         // POST: Usuarios/Create
@@ -53,15 +64,17 @@ namespace Broker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CantDinero,ID,Nombre,Apellido,Mail,Telefono,DNI")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("ID,Nombre,Apellido,Mail,Telefono,DNI,Direccion")] Usuario usuario)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(usuario);
+            usuario.Direccion = _context.Direcciones.Find(TempData["dirID"]);
+            usuario.CantDinero = 0;
+            //agrega el usuario
+            _context.Add(usuario);
+            //le hace un update a la direccion del usuario
+            _context.Update(usuario.Direccion);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Usuarios/Edit/5
@@ -152,6 +165,61 @@ namespace Broker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Depositar() 
+        {
+            ViewBag.listaUsuarios = _context.Usuarios.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Depositar(int id, int CantDinero)
+        {
+            Usuario usuario = _context.Usuarios.Find(id);
+            if (CantDinero != 0)
+            {
+                usuario.CantDinero += CantDinero;
+                _context.Update(usuario);
+                _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
+
+        }
+        public IActionResult Extraer()
+        {
+            ViewBag.listaUsuarios = _context.Usuarios.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Extraer(int id, int CantDinero)
+        {
+            Usuario usuario = _context.Usuarios.Find(id);
+            if (usuario.esCantDineroValido(CantDinero))
+            {
+                usuario.CantDinero -= CantDinero;
+                _context.Update(usuario);
+                _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
+
+        }
+
+        public async Task<IActionResult> Cartera(int id)
+        {
+            //Se creo el modelo AccionOrden para que contenga el join. Dentro del join se le asigna un new y se le pasan los datos para que pueda pasarlo a la vista. 
+            IEnumerable<AccionOrden> test = _context.Acciones.Join(_context.Ordenes, a => a.Id, o => o.Id, (a, o) => new AccionOrden {
+                NombreEmpresa = a.Empresa,
+                PrecioAccion = a.Precio,
+                OrdenId = o.Id,
+                CantidadAccion = o.Cantidad,
+                FechaCompra = o.FechaCompra,
+                EsCompra = o.EsCompra
+            }).Where(o => o.OrdenId == id).ToList();
+            
+            ViewBag.NombreCompleto = _context.Usuarios.Find(id).NombreCompletoConID();
+            return View(test);
+
+        }
         private bool UsuarioExists(int id)
         {
           return _context.Usuarios.Any(e => e.ID == id);

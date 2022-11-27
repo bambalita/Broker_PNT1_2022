@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Broker.Models.AccionOrden>
+
+@{
+    ViewData["Title"] = "Cartera";
+}
+
+<h1>@ViewBag.NombreCompleto</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreEmpresa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrecioAccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadAccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaCompra)
+            </th>
+            <th>
+                <text>Compra/Venta</text>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreEmpresa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrecioAccion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadAccion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaCompra)
+                </td>
+                <td>
+                    @if (item.EsCompra) {
+                        <text>Compra</text>
+                    }else
+                    {
+                        <text>Venta</text>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+

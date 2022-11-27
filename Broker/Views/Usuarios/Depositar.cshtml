@@ -1,0 +1,32 @@
+﻿@model Broker.Models.Usuario
+
+@{
+    ViewData["Title"] = "Depositar";
+}
+<h1>Depositar</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Depositar">
+        <div class="form-group">
+            <select asp-for="ID" class="form-control">
+                @foreach (var item in ViewBag.listaUsuarios)
+                {
+                        <option value="@item.ID">@item.NombreCompletoConID()</option>
+                }
+            </select>
+        </div>
+        <br />
+        <div class="form-group">
+            <label asp-for="CantDinero" class="control-label"></label>
+            <input asp-for="CantDinero" class="form-control" />
+            <span asp-validation-for="CantDinero" class="text-danger"></span>
+        </div>
+        <br />
+        <div class="form-group">
+            <input type="submit" value="Confirmar" class="btn btn-primary" />
+        </div>
+        </form>
+    </div>
+</div>
