@@ -6,7 +6,7 @@ namespace Broker.Models
     {
         protected override void OnConfiguring(DbContextOptionsBuilder option)
         {
-            option.UseSqlServer("Data Source=DESKTOP-HS43TRO\\ORT2022C2; Initial Catalog=Broker; Integrated Security=true");
+            option.UseSqlServer("Data Source=(local); Initial Catalog=Broker; Integrated Security=true");
         }
 
         public DbSet<Direccion> Direcciones { get; set; }
